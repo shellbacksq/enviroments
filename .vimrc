@@ -57,7 +57,33 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'Yggdroot/indentLine'
 
+"目录树显示git状态
+Plug 'preservim/nerdtree' |
+            \ Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'bsdelf/bufferhint'
+
+
+" 图标
+"Plug 'ryanoasis/vim-devicons'
 " Initialize plugin system
+" 展示函数列表
+Plug 'majutsushi/tagbar'
+
+" 多行编辑
+"Plug 'terryma/vim-multiple-cursors'''
+
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+" 自动补全引号、圆括号、花括号等
+Plug 'jiangmiao/auto-pairs'
+
+" NerdTree文件类型高亮
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
+" 翻页更加顺畅
+Plug 'terryma/vim-smooth-scroll'
+
+Plug 'Shougo/echodoc.vim'
 call plug#end()
 
 let g:coc_disable_startup_warning = 1
@@ -66,6 +92,7 @@ let mapleader=","
 
 
 " 全局配置
+
 syntax on  "语法高亮
 
 set showmode "底部显示当前模式
@@ -84,14 +111,14 @@ set softtabstop=4 "tab转为４个空格
 set clipboard^=unnamed,unnamedplus "设置无名寄存器为系统粘贴板
 
 "　括号自动补全
-inoremap ' ''<ESC>i
-inoremap " ""<ESC>i
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-"数组则不换行
-inoremap { {}<ESC>i
-"函数左括号加回车则换行
-inoremap {<CR> {<CR>}<ESC>O
+"inoremap ' ''<ESC>i
+"inoremap " ""<ESC>i
+"inoremap ( ()<ESC>i
+"inoremap [ []<ESC>i
+""数组则不换行
+"inoremap { {}<ESC>i
+""函数左括号加回车则换行
+"inoremap {<CR> {<CR>}<ESC>O
 "　vim 恢复到上一次打开的位置
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
@@ -115,10 +142,19 @@ set incsearch " 搜索模式时，每输入一个字符就自动搜索
 " 使用 ss 启用
 nmap ss <Plug>(easymotion-s2)
 
+" 设置echodoc
+set noshowmode 
+
 " 设置NerdTree
 map <F10> :NERDTreeMirror<CR>
 map <F10> :NERDTreeToggle<CR>
 
+" 设置tagbar
+nmap <F8> :TagbarToggle<CR>
+
+" buffer切换
+nnoremap - :call bufferhint#Popup()<CR>
+nnoremap \ :call bufferhint#LoadPrevious()<CR>))
 
 ""gutentags搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归 "
 let g:gutentags_project_root = ['.root', '.svn', '.git', '.project']
@@ -174,3 +210,27 @@ set laststatus=2  "永远显示状态栏
 let g:airline#extensions#tabline#enabled = 1 "" 显示窗口tab和buffer
 let g:airline_theme='hybridline'
 
+" vim-smooth-scroll
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 0, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 0, 2)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(&scroll*2, 0, 4)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(&scroll*2, 0, 4)<CR>
+
+" Vim-multiple-cursors 
+"let g:multi_cursor_next_key='<C-n>'
+
+"let g:multi_cursor_prev_key='<C-p>'
+
+"let g:multi_cursor_skip_key='<C-x>'
+
+"let g:multi_cursor_quit_key='<Esc>'
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
