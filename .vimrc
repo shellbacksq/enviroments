@@ -84,6 +84,24 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'terryma/vim-smooth-scroll'
 
 Plug 'Shougo/echodoc.vim'
+
+" 语法分析
+Plug 'dense-analysis/ale'
+
+Plug 'mbbill/undotree'
+
+Plug 'skywind3000/asyncrun.vim'
+
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
+Plug 'farmergreg/vim-lastplace'
+
+if has('nvim') || has('patch-8.0.902')
+  Plug 'mhinz/vim-signify'
+else
+  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+endif
+
 call plug#end()
 
 let g:coc_disable_startup_warning = 1
@@ -234,3 +252,45 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+"ale
+le_sign_column_always = 1
+let g:ale_set_highlights = 0
+"自定义error和warning图标
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡'
+"在vim自带的状态栏中整合ale
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']
+"显示Linter名称,出错或警告等相关信息
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+nmap sp <Plug>(ale_previous_wrap)
+nmap sn <Plug>(ale_next_wrap)
+"<Leader>s触发/关闭语法检查
+nmap <Leader>s :ALEToggle<CR>
+"<Leader>d查看错误或警告的详细信息
+nmap <Leader>d :ALEDetail<CR>
+
+set undofile " Maintain undo history between sessions
+set undodir=~/.vim/undodir
+
+" AsyncRun
+" 自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 16
+
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+
+" 设置 F10 打开/关闭 Quickfix 窗口
+nnoremap <F8> :call asyncrun#quickfix_toggle(16)<cr>
+
+" undotree
+nnoremap <F5> :UndotreeToggle<cr>
+
+" vim-session
+let g:session_autosave = 'no'
+let g:session_autoload = 'no'
+nnoremap <Leader>se :SaveSession<Cr>
+nnoremap <Leader>os :OpenSession<Cr>
