@@ -1,5 +1,0 @@
-[user]
-	name = sq
-	email = sunqiang42@163.com
-[http "https://github.com"]
-#	proxy = socks5://127.0.0.1:1080
